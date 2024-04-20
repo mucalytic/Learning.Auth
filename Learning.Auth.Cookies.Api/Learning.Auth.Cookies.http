@@ -1,0 +1,6 @@
+@Learning.Auth.Cookies_HostAddress = http://localhost:5083
+
+GET {{Learning.Auth.Cookies_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
