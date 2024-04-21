@@ -3,8 +3,19 @@ using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthentication("cookie")
-                .AddCookie("cookie");
+builder.Services.AddAuthentication("cookie").AddCookie("cookie", options =>
+{
+    options.Events.OnRedirectToAccessDenied = context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        return Task.CompletedTask;
+    };
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        return Task.CompletedTask;
+    };
+});
 
 builder.Services.AddAuthorization(options =>
 {
@@ -13,7 +24,8 @@ builder.Services.AddAuthorization(options =>
         policyBuilder.RequireAuthenticatedUser()
                      .AddAuthenticationSchemes("cookie")
                      .RequireClaim("passport")
-                     .RequireClaim("visa", "russia");
+                     .RequireClaim("visa", "russia")
+                     .Build();
     });
 });
 
@@ -32,7 +44,7 @@ app.MapGet("/sign-in", async (HttpContext context) =>
         {
             new("usr", "aaron"),
             new("passport", "uk"),
-            new("visa", "ukraine")
+            new("visa", "russia")
         };
         var identity = new ClaimsIdentity(claims, "cookie");
         var user = new ClaimsPrincipal(identity);
