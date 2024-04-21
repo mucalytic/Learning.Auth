@@ -11,11 +11,15 @@ var app = builder.Build();
 app.UseAuthentication();
 
 app.MapGet("/username", (HttpContext context) =>
-    context.User.FindFirst("usr")?.Value);
+    context.User.FindFirst("usr")?.Value ?? "empty");
 
 app.MapGet("/sign-in", async (HttpContext context) =>
 {
-    var claims = new List<Claim> { new("usr", "aaron") };
+    var claims = new List<Claim>
+    {
+        new("usr", "aaron"),
+        new("passport", "uk")
+    };
     var identity = new ClaimsIdentity(claims, "cookie");
     var user = new ClaimsPrincipal(identity);
     await context.SignInAsync("cookie", user);
