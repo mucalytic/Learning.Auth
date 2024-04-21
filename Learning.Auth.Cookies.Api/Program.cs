@@ -6,27 +6,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication("cookie")
                 .AddCookie("cookie");
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("visiting-russia", policyBuilder =>
+    {
+        policyBuilder.RequireAuthenticatedUser()
+                     .AddAuthenticationSchemes("cookie")
+                     .RequireClaim("passport")
+                     .RequireClaim("visa", "russia");
+    });
+});
+
 var app = builder.Build();
 
 app.UseAuthentication();
-
-app.Use((context, next) =>
-{
-    if (context.User.Identities.All(i => i.AuthenticationType != "cookie"))
-    {
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        return Task.CompletedTask;
-    }
-    if (!context.User.HasClaim("passport", "russia")) // the required claim comes from attribute or extension on the endpoint
-    {
-        context.Response.StatusCode = StatusCodes.Status403Forbidden;
-        return Task.CompletedTask;
-    }
-    return next();
-});
+app.UseAuthorization();
 
 app.MapGet("/username", (HttpContext context) =>
-    context.User.FindFirst("usr")?.Value ?? "empty");
+    context.User.FindFirst("usr")?.Value ?? "empty")
+   .AllowAnonymous();
 
 app.MapGet("/sign-in", async (HttpContext context) =>
     {
@@ -34,7 +32,7 @@ app.MapGet("/sign-in", async (HttpContext context) =>
         {
             new("usr", "aaron"),
             new("passport", "uk"),
-            new("passport", "russia")
+            new("visa", "ukraine")
         };
         var identity = new ClaimsIdentity(claims, "cookie");
         var user = new ClaimsPrincipal(identity);
@@ -43,6 +41,7 @@ app.MapGet("/sign-in", async (HttpContext context) =>
     })
    .AllowAnonymous();
 
-app.MapGet("/visiting/russia", () => { });
+app.MapGet("/visiting/russia", () => "Welcome to Russia!")
+   .RequireAuthorization("visiting-russia");
 
 app.Run();
