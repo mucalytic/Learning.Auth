@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Cookies.Api", "Learning.Auth.Cookies.Api\Learning.Auth.Cookies.Api.csproj", "{4E15F0A9-E45F-4E58-8181-02130E981A14}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Identity.Cookies.Api", "Learning.Auth.Identity.Cookies.Api\Learning.Auth.Identity.Cookies.Api.csproj", "{968F69F4-C0AA-44C7-B8F6-4DC6D82C97F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{4E15F0A9-E45F-4E58-8181-02130E981A14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E15F0A9-E45F-4E58-8181-02130E981A14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E15F0A9-E45F-4E58-8181-02130E981A14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{968F69F4-C0AA-44C7-B8F6-4DC6D82C97F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{968F69F4-C0AA-44C7-B8F6-4DC6D82C97F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{968F69F4-C0AA-44C7-B8F6-4DC6D82C97F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{968F69F4-C0AA-44C7-B8F6-4DC6D82C97F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
