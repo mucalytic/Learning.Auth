@@ -1,16 +1,16 @@
 using Default = Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.DataProtection;
 using Learning.Auth.Identity.Cookies.Api;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDataProtection();
 builder.Services.AddAuthentication(Default.AuthenticationScheme)
                 .AddCookie(Default.AuthenticationScheme);
-
 builder.Services.AddSingleton<IDictionary<string, User>>(new Dictionary<string, User>());
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("developers-only", policyBuilder =>
@@ -56,7 +56,7 @@ app.MapGet("/sign-in",
    .AllowAnonymous();
 
 app.MapGet("/employ",
-    (IDictionary<string, User> store, string username) =>
+   (IDictionary<string, User> store, string username) =>
     {
         var usernameHash = username.Hash();
         if (!store.TryGetValue(usernameHash, out var user)) return Results.NotFound();
@@ -68,5 +68,27 @@ app.MapGet("/employ",
 
 app.MapGet("/fix-bugs", () => "Good job!")
    .RequireAuthorization("developers-only");
+
+app.MapGet("/start-password-reset",
+   (IDictionary<string, User> store, IDataProtectionProvider provider, string username) =>
+        store.TryGetValue(username.Hash(), out var user)
+            ? Results.Ok(provider.CreateProtector("password-reset")
+                                 .Protect(user.Username.Value))
+            : Results.NotFound())
+   .AllowAnonymous();
+
+app.MapGet("/end-password-reset",
+   (IDictionary<string, User> store, IDataProtectionProvider provider,
+    IPasswordHasher<User> hasher, string username, string password, string hash) =>
+    {
+        var unhashedUsername = provider.CreateProtector("password-reset").Unprotect(hash);
+        if (unhashedUsername != username) return Results.BadRequest();
+        var usernameHash = username.Hash();
+        if (!store.TryGetValue(usernameHash, out var user)) return Results.NotFound();
+        user = user with { PasswordHash = hasher.HashPassword(user, password) };
+        store[usernameHash] = user;
+        return Results.Ok(user);
+    })
+   .AllowAnonymous();
 
 app.Run();
