@@ -20,6 +20,12 @@ builder.Services.AddAuthorization(options =>
                      .RequireClaim("role", "developer")
                      .Build();
     });
+    options.AddPolicy("signed-in", policyBuilder =>
+    {
+        policyBuilder.RequireAuthenticatedUser()
+                     .AddAuthenticationSchemes(Default.AuthenticationScheme)
+                     .Build();
+    });
 });
 
 var app = builder.Build();
@@ -75,7 +81,7 @@ app.MapGet("/start-password-reset",
             ? Results.Ok(provider.CreateProtector("password-reset")
                                  .Protect(user.Username.Value))
             : Results.NotFound())
-   .AllowAnonymous();
+   .RequireAuthorization("signed-in");
 
 app.MapGet("/end-password-reset",
    (IDictionary<string, User> store, IDataProtectionProvider provider,
