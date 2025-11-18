@@ -50,11 +50,10 @@ app.MapGet("/create-jwt-token", (string rsaPrivateKey) =>
         new SecurityTokenDescriptor
         {
             Issuer = "https://localhost:7199",
-            Subject = new ClaimsIdentity(new[]
-            {
+            Subject = new ClaimsIdentity([
                 new Claim("subscriptionId", Guid.NewGuid().ToString()),
                 new Claim("name", "aaron")
-            }),
+            ]),
             SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.RsaSha256)
         });
     return token;
