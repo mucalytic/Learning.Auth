@@ -1,10 +1,5 @@
 using System.Security.Cryptography;
 
-var builder = WebApplication.CreateBuilder(args);
-
-var app = builder.Build();
-
-app.MapGet("/create-rsa-private-key", () =>
-    Convert.ToBase64String(RSA.Create().ExportRSAPrivateKey()));
-
-app.Run();
+var rsaKey = RSA.Create();
+var privateKey = rsaKey.ExportRSAPrivateKey();
+File.WriteAllBytes("key", privateKey);
