@@ -1,8 +1,9 @@
 using System.Security.Cryptography;
 
 var rsaKey = RSA.Create();
-var privateKey = rsaKey.ExportRSAPrivateKey();
-File.WriteAllBytes("key", privateKey);
+var privateKey = File.ReadAllBytes("key");
+rsaKey.ImportRSAPrivateKey(privateKey, out _);
+
 
 var builder = WebApplication.CreateBuilder(args);
 
