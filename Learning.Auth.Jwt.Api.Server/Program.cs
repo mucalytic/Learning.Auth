@@ -1,3 +1,4 @@
+using static Microsoft.IdentityModel.Tokens.SecurityAlgorithms;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
@@ -19,12 +20,12 @@ builder.Services
 
 var app = builder.Build();
 
-app.UseAuthentication();
+app.UseHttpsRedirection();
 
 app.MapGet("/", (HttpContext ctx) => "hello world");
 app.MapGet("/jwt", () =>
 {
-    // this uses the RSA key to sign the JWT token
+    // this uses the RSA private key to sign the JWT token
     var key = new RsaSecurityKey(rsaKey);
     var handler = new JsonWebTokenHandler();
     var descriptor = new SecurityTokenDescriptor
@@ -34,7 +35,7 @@ app.MapGet("/jwt", () =>
             new Claim("sub", Guid.NewGuid().ToString()),
             new Claim("name", "Aaron")
         ]),
-        SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.RsaSha256)
+        SigningCredentials = new SigningCredentials(key, RsaSha256)
     };
     var token = handler.CreateToken(descriptor);
     return token; // returns a JWT token
