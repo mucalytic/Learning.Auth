@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Jwt.Api.Clien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Jwt.Api.Server", "Learning.Auth.Jwt.Api.Server\Learning.Auth.Jwt.Api.Server.csproj", "{5CD60402-5CA0-4A4B-AD99-D791E8EF9986}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Basics.Api", "Learning.Auth.Basics.Api\Learning.Auth.Basics.Api.csproj", "{FE012954-A12E-4F4F-A936-07DB26E8C3AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{5CD60402-5CA0-4A4B-AD99-D791E8EF9986}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CD60402-5CA0-4A4B-AD99-D791E8EF9986}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CD60402-5CA0-4A4B-AD99-D791E8EF9986}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE012954-A12E-4F4F-A936-07DB26E8C3AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE012954-A12E-4F4F-A936-07DB26E8C3AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE012954-A12E-4F4F-A936-07DB26E8C3AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE012954-A12E-4F4F-A936-07DB26E8C3AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
