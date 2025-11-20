@@ -72,4 +72,13 @@ app.MapGet("/jwt", () =>
     return token; // returns a JWT token
 });
 
+app.MapGet("/jwk", () => // this returns a JWKS (with one key) because we don't want to use OIDC to do it
+{
+    var publicKey = RSA.Create();
+    publicKey.ImportRSAPublicKey(rsaKey.ExportRSAPublicKey(), out _);
+    var key = new RsaSecurityKey(publicKey); // this is just the public key
+    var jwk = JsonWebKeyConverter.ConvertFromRSASecurityKey(key);
+    return jwk;
+});
+
 app.Run();
