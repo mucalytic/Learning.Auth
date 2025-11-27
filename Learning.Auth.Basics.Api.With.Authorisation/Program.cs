@@ -14,22 +14,25 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 
-app.MapGet("/unsecure", (HttpContext context) =>
-    context.User.FindFirst("usr")?.Value ?? "empty");
-
-app.MapGet("/switzerland", (HttpContext context) =>
+app.Use((context, next) =>
 {
-    // first must be authenticated with the correct schema ("cookie")
+    if (context.Request.Path.StartsWithSegments("/login")) return next(context);
     if (context.User.Identities.All(identity => identity.AuthenticationType != authScheme))
     {
         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        return "unauthorised";
+        return Task.CompletedTask;
     }
-    // then must have the correct claim with the correct value
-    if (context.User.HasClaim("pass", "ch")) return "allowed";
-    context.Response.StatusCode = StatusCodes.Status403Forbidden;
-    return "not allowed";
-}); 
+    if (!context.User.HasClaim("pass", "ch"))
+    {
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        return Task.CompletedTask;
+    }
+    return next(context);
+});
+
+// this will only return the name if you've logged in and have a "pass" claim with a value of "ch"
+app.MapGet("/unsecure", (HttpContext context) =>
+    context.User.FindFirst("usr")?.Value ?? "empty");
 
 app.MapGet("/login", async context =>
 {
@@ -39,6 +42,7 @@ app.MapGet("/login", async context =>
     ];
     var identity = new ClaimsIdentity(claims, authScheme);
     var user = new ClaimsPrincipal(identity);
+    // the user is specifically signing in with the schema "cookie"
     await context.SignInAsync(authScheme, user);
 });
 
