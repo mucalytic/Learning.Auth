@@ -16,15 +16,15 @@ app.UseAuthentication();
 
 app.Use((context, next) =>
 {
-    if (context.Request.Path.StartsWithSegments("/login")) return next(context);
+    if (context.Request.Path.StartsWithSegments("/login")) return next(context); // allow anonymous
     if (context.User.Identities.All(identity => identity.AuthenticationType != authScheme))
     {
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized; // not authenticated
         return Task.CompletedTask;
     }
     if (!context.User.HasClaim("pass", "ch"))
     {
-        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        context.Response.StatusCode = StatusCodes.Status403Forbidden; // not authorised
         return Task.CompletedTask;
     }
     return next(context);
