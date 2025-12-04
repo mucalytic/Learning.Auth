@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Basics.Api", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Basics.Api.With.Authorisation", "Learning.Auth.Basics.Api.With.Authorisation\Learning.Auth.Basics.Api.With.Authorisation.csproj", "{5EC12237-9452-4D78-8E35-8D13E96D3A39}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Basics.Api.Schemas", "Learning.Auth.Basics.Api.Schemas\Learning.Auth.Basics.Api.Schemas.csproj", "{72E3C1A4-7241-4B0B-A58F-D49865CE730C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{5EC12237-9452-4D78-8E35-8D13E96D3A39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EC12237-9452-4D78-8E35-8D13E96D3A39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EC12237-9452-4D78-8E35-8D13E96D3A39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72E3C1A4-7241-4B0B-A58F-D49865CE730C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72E3C1A4-7241-4B0B-A58F-D49865CE730C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72E3C1A4-7241-4B0B-A58F-D49865CE730C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72E3C1A4-7241-4B0B-A58F-D49865CE730C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

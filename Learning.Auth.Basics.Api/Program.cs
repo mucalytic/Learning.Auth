@@ -11,9 +11,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.MapGet("/username", (HttpContext context) =>
-{
-    return context.User.FindFirst("usr")?.Value ?? "empty";
-});
+    context.User.FindFirst("usr")?.Value ?? "empty");
 
 // logic for dealing out the authentication cookie
 app.MapGet("/login", async (HttpContext context) =>
