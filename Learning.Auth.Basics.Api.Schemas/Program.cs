@@ -26,7 +26,10 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/", () => "hello")
+app.MapGet("/", (HttpContext context) =>
+    {
+        return Results.Ok("hello");
+    })
    .RequireAuthorization("customer");
 
 app.MapGet("/login-local", async context => {
@@ -35,6 +38,6 @@ app.MapGet("/login-local", async context => {
         var user = new ClaimsPrincipal(identity);
         await context.SignInAsync("local", user);
     })
-   .AllowAnonymous();
+    .AllowAnonymous();
 
 app.Run();
