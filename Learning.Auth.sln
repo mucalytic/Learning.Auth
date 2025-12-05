@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Basics.Api.Wi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Basics.Api.Schemas", "Learning.Auth.Basics.Api.Schemas\Learning.Auth.Basics.Api.Schemas.csproj", "{72E3C1A4-7241-4B0B-A58F-D49865CE730C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Cookies", "Learning.Auth.Cookies\Learning.Auth.Cookies.csproj", "{846E5FD1-0837-45B1-9C38-E13EB7065AC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Cookies.Api", "Learning.Auth.Cookies.Api\Learning.Auth.Cookies.Api.csproj", "{846E5FD1-0837-45B1-9C38-E13EB7065AC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
