@@ -10,11 +10,11 @@ public class HomeController : Controller
     public async Task<IActionResult> Login()
     {
         IEnumerable<Claim> claims = [
-            new(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString())
+            new(ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()) // userId
         ];
-        var identity = new ClaimsIdentity(claims);
+        var identity = new ClaimsIdentity(claims, "default"); // authentication type can be anything
         var user = new ClaimsPrincipal(identity);
-        await HttpContext.SignInAsync(user);
+        await HttpContext.SignInAsync("default", user); // must match the registered authentication (cookie) scheme
         return Ok();
     }
 }
