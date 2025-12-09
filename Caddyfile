@@ -1,0 +1,7 @@
+identity.company.local {
+    reverse_proxy localhost:5154
+}
+
+api.company.local {
+    reverse_proxy localhost:5147
+}
