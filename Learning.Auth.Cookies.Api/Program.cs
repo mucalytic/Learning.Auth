@@ -9,9 +9,16 @@ builder.Services.AddAuthentication("default") // set default scheme so that you 
                 .AddCookie("default", options =>
                 {
                     options.Cookie.Name = "aaron.cookie";
-                    options.ExpireTimeSpan = TimeSpan.FromSeconds(10);
+                    options.ExpireTimeSpan = TimeSpan.FromDays(1);
                 });
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("failure", policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim("blah", "fnar");
+    });
+});
 builder.Services.AddControllers(); // allows you to pick up controllers from the file directory
 
 var app = builder.Build();
@@ -22,7 +29,7 @@ app.UseAuthorization();
 app.UseHttpsRedirection();
 app.MapGet("/", () => "hello");
 app.MapGet("/test", () => "hello")
-   .RequireAuthorization();
+   .RequireAuthorization("failure");
 app.MapPost("/login", async (HttpContext httpContext) =>
 {
     IEnumerable<Claim> claims = [
@@ -30,7 +37,13 @@ app.MapPost("/login", async (HttpContext httpContext) =>
     ];
     var identity = new ClaimsIdentity(claims, "default"); // authentication type can be anything
     var user = new ClaimsPrincipal(identity);
-    await httpContext.SignInAsync("default", user, new AuthenticationProperties { IsPersistent = true }); // must match the registered authentication (cookie) scheme
+    var properties = new AuthenticationProperties { IsPersistent = true };
+    await httpContext.SignInAsync("default", user, properties); // must match the registered authentication (cookie) scheme
+    return "ok";
+});
+app.MapGet("/logout", async (HttpContext httpContext) =>
+{
+    await httpContext.SignOutAsync("default");
     return "ok";
 });
 app.MapDefaultControllerRoute();
