@@ -14,6 +14,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Basics.Api.Sc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Cookies.Api", "Learning.Auth.Cookies.Api\Learning.Auth.Cookies.Api.csproj", "{846E5FD1-0837-45B1-9C38-E13EB7065AC2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Cookies.Sso.Api", "Learning.Auth.Cookies.Sso.Api\Learning.Auth.Cookies.Sso.Api.csproj", "{1802B3F8-0F9E-4492-872C-D7D51B6672DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Cookies.Sso.Identity", "Learning.Auth.Cookies.Sso.Identity\Learning.Auth.Cookies.Sso.Identity.csproj", "{56D549F0-501E-4C07-857E-28EE43F1BA51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +52,13 @@ Global
 		{846E5FD1-0837-45B1-9C38-E13EB7065AC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{846E5FD1-0837-45B1-9C38-E13EB7065AC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{846E5FD1-0837-45B1-9C38-E13EB7065AC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1802B3F8-0F9E-4492-872C-D7D51B6672DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1802B3F8-0F9E-4492-872C-D7D51B6672DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1802B3F8-0F9E-4492-872C-D7D51B6672DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1802B3F8-0F9E-4492-872C-D7D51B6672DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56D549F0-501E-4C07-857E-28EE43F1BA51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56D549F0-501E-4C07-857E-28EE43F1BA51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56D549F0-501E-4C07-857E-28EE43F1BA51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56D549F0-501E-4C07-857E-28EE43F1BA51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
