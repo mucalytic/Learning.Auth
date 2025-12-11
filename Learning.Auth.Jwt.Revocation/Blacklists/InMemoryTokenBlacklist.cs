@@ -7,22 +7,22 @@ public class InMemoryTokenBlacklist : ITokenBlacklist
 {
     private readonly ConcurrentDictionary<string, DateTime> _blacklist = new();
 
-    public Task BlacklistAsync(string session, DateTime expires)
+    public Task BlacklistAsync(string token, DateTime expires)
     {
         if (expires > DateTime.UtcNow)
         {
-            _blacklist[session] = expires;
+            _blacklist[token] = expires;
         }
         return Task.CompletedTask;
     }
 
-    public Task<bool> IsBlacklistedAsync(string session)
+    public Task<bool> IsBlacklistedAsync(string token)
     {
-        if (_blacklist.TryGetValue(session, out var expires))
+        if (_blacklist.TryGetValue(token, out var expires))
         {
             if (DateTime.UtcNow >= expires)
             {
-                _blacklist.TryRemove(session, out _);
+                _blacklist.TryRemove(token, out _);
                 return Task.FromResult(false);
             }
             return Task.FromResult(true);
