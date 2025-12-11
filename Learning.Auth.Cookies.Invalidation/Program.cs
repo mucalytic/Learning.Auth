@@ -1,41 +1,21 @@
+using static System.Security.Claims.ClaimTypes;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddAuthentication("cookie").AddCookie("cookie");
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
 app.UseHttpsRedirection();
-
-var summaries = new[]
+app.MapGet("/login", () =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast");
-
+    IEnumerable<Claim> claims = [new(NameIdentifier, Guid.NewGuid().ToString())];
+    var identity = new ClaimsIdentity(claims, "cookie");
+    var user = new ClaimsPrincipal(identity);
+    return Results.SignIn(user, new AuthenticationProperties(), "cookie");
+});
+app.MapGet("/user", (ClaimsPrincipal user) =>
+    user.Claims.Select(claim => new { claim.Type, claim.Value }).ToList());
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
