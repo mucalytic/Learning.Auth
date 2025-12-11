@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Cookies.Sso.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Cookies.Invalidation", "Learning.Auth.Cookies.Invalidation\Learning.Auth.Cookies.Invalidation.csproj", "{47969F5D-637F-457F-B2C0-5CFED25F3487}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Jwt.Revocation", "Learning.Auth.Jwt.Revocation\Learning.Auth.Jwt.Revocation.csproj", "{E71C87FB-A123-416C-B51E-959D287511AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,5 +68,9 @@ Global
 		{47969F5D-637F-457F-B2C0-5CFED25F3487}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47969F5D-637F-457F-B2C0-5CFED25F3487}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47969F5D-637F-457F-B2C0-5CFED25F3487}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E71C87FB-A123-416C-B51E-959D287511AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E71C87FB-A123-416C-B51E-959D287511AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E71C87FB-A123-416C-B51E-959D287511AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E71C87FB-A123-416C-B51E-959D287511AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
