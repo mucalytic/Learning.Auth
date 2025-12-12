@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<ITokenBlacklist, InMemoryTokenBlacklist>();
+builder.Services.AddSingleton<ITokenBlacklist, RedisTokenBlacklist>();
 builder.Services.AddAuthentication("cookie").AddCookie("cookie", options =>
 {
     options.Events.OnValidatePrincipal = async context =>
@@ -18,11 +18,13 @@ builder.Services.AddAuthentication("cookie").AddCookie("cookie", options =>
         if (blacklisted) context.RejectPrincipal();
     };
 });
+builder.Services.AddStackExchangeRedisCache(options =>
+    options.Configuration = "localhost:6379");
 
 var app = builder.Build();
 
 app.UseHttpsRedirection();
-app.MapGet("/login", () =>
+app.MapGet("/login", async (HttpContext context) =>
 {
     IEnumerable<Claim> claims = [
         new(NameIdentifier, Guid.NewGuid().ToString()),
@@ -35,7 +37,22 @@ app.MapGet("/login", () =>
         IsPersistent = true,
         ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
     };
-    return Results.SignIn(user, properties, "cookie");
+    await context.SignInAsync("cookie", user, properties);
+    return Results.Ok("logged in");
+});
+app.MapPost("/logout", async (HttpContext context, ITokenBlacklist blacklist) =>
+{
+    var session = context.User.FindFirstValue("session");
+    if (session is not null)
+    {
+        var expiry = context.User.FindFirstValue(Expiration);
+        if (expiry is not null)
+        {
+            await blacklist.BlacklistAsync(session, DateTimeOffset.Parse(expiry));
+        }
+    }
+    await context.SignOutAsync("cookie");
+    return Results.Ok("logged out");
 });
 app.MapGet("/user", (ClaimsPrincipal user) =>
     user.Claims.Select(claim => new { claim.Type, claim.Value }).ToList());

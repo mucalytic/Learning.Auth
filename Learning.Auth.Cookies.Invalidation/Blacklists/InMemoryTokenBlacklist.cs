@@ -5,9 +5,9 @@ namespace Learning.Auth.Cookies.Invalidation.Blacklists;
 
 public class InMemoryTokenBlacklist : ITokenBlacklist
 {
-    private readonly ConcurrentDictionary<string, DateTime> _blacklist = new();
+    private readonly ConcurrentDictionary<string, DateTimeOffset> _blacklist = new();
 
-    public Task BlacklistAsync(string session, DateTime expires)
+    public Task BlacklistAsync(string session, DateTimeOffset expires)
     {
         if (expires > DateTime.UtcNow)
         {
