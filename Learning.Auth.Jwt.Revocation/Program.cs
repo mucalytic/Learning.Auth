@@ -29,9 +29,10 @@ builder.Services.AddAuthentication("jwt").AddJwtBearer("jwt", options =>
                 context.Token = context.Request.Query["t"];
                 if (context.Token is null) return;
                 var blacklist = context.HttpContext.RequestServices.GetRequiredService<ITokenBlacklist>();
-                var hash = Encoding.UTF8.GetBytes(context.Token);
-                var bs64 = Convert.ToBase64String(hash);
-                var blacklisted = await blacklist.IsBlacklistedAsync(bs64);
+                var bytes = Encoding.UTF8.GetBytes(context.Token);
+                var hash = SHA256.HashData(bytes);
+                var base64Hash = Convert.ToBase64String(hash);
+                var blacklisted = await blacklist.IsBlacklistedAsync(base64Hash);
                 if (blacklisted) context.Fail("Token has been invalidated");
             }
         }
@@ -68,8 +69,9 @@ app.MapGet("/user", (ClaimsPrincipal user) =>
 app.MapGet("/blacklist", async (ITokenBlacklist blacklist, string token) =>
 {
     // token can be quite big, so let's hash it first
-    var hash = Encoding.UTF8.GetBytes(token);
-    var bs64 = Convert.ToBase64String(hash);
-    await blacklist.BlacklistAsync(bs64, DateTime.UtcNow.AddMinutes(10));
+    var bytes = Encoding.UTF8.GetBytes(token);
+    var hash = SHA256.HashData(bytes);
+    var base64Hash = Convert.ToBase64String(hash);
+    await blacklist.BlacklistAsync(base64Hash, DateTime.UtcNow.AddMinutes(10));
 });
 app.Run();
