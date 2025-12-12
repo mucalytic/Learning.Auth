@@ -40,7 +40,7 @@ app.MapGet("/login", async (HttpContext context) =>
     await context.SignInAsync("cookie", user, properties);
     return Results.Ok("logged in");
 });
-app.MapPost("/logout", async (HttpContext context, ITokenBlacklist blacklist) =>
+app.MapGet("/logout", async (HttpContext context, ITokenBlacklist blacklist) =>
 {
     var session = context.User.FindFirstValue("session");
     if (session is not null)
@@ -56,6 +56,4 @@ app.MapPost("/logout", async (HttpContext context, ITokenBlacklist blacklist) =>
 });
 app.MapGet("/user", (ClaimsPrincipal user) =>
     user.Claims.Select(claim => new { claim.Type, claim.Value }).ToList());
-app.MapGet("/blacklist", async (ITokenBlacklist blacklist, string session) =>
-    await blacklist.BlacklistAsync(session, DateTime.UtcNow.AddMinutes(10)));
 app.Run();
