@@ -24,17 +24,14 @@ builder.Services.AddAuthentication("jwt").AddJwtBearer("jwt", options =>
     {
         OnMessageReceived = async context => // token can come from the query (as an example)
         {
-            if (context.Request.Query.ContainsKey("t"))
-            {
-                context.Token = context.Request.Query["t"];
-                if (context.Token is null) return;
-                var blacklist = context.HttpContext.RequestServices.GetRequiredService<ITokenBlacklist>();
-                var bytes = Encoding.UTF8.GetBytes(context.Token);
-                var hash = SHA256.HashData(bytes);
-                var base64Hash = Convert.ToBase64String(hash);
-                var blacklisted = await blacklist.IsBlacklistedAsync(base64Hash);
-                if (blacklisted) context.Fail("Token has been invalidated");
-            }
+            if (context.Request.Query.ContainsKey("t")) context.Token = context.Request.Query["t"];
+            if (context.Token is null) return;
+            var blacklist = context.HttpContext.RequestServices.GetRequiredService<ITokenBlacklist>();
+            var bytes = Encoding.UTF8.GetBytes(context.Token);
+            var hash = SHA256.HashData(bytes);
+            var base64Hash = Convert.ToBase64String(hash);
+            var blacklisted = await blacklist.IsBlacklistedAsync(base64Hash);
+            if (blacklisted) context.Fail("Token has been invalidated");
         }
     };
     options.Configuration = new OpenIdConnectConfiguration
