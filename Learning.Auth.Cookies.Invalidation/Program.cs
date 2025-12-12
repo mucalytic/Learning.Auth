@@ -30,7 +30,12 @@ app.MapGet("/login", () =>
     ];
     var identity = new ClaimsIdentity(claims, "cookie");
     var user = new ClaimsPrincipal(identity);
-    return Results.SignIn(user, new AuthenticationProperties(), "cookie");
+    var properties = new AuthenticationProperties
+    {
+        IsPersistent = true,
+        ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+    };
+    return Results.SignIn(user, properties, "cookie");
 });
 app.MapGet("/user", (ClaimsPrincipal user) =>
     user.Claims.Select(claim => new { claim.Type, claim.Value }).ToList());
