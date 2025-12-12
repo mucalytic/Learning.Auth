@@ -38,8 +38,9 @@ builder.Services.AddAuthentication("jwt").AddJwtBearer("jwt", options =>
     {
         SigningKeys =
         {
-            new RsaSecurityKey(rsaKey)
-        }
+            new RsaSecurityKey(rsaKey) // rsaKey - public key should be accessible via a public jwks endpoint
+        }                              //        - private key should be in key vault
+
     };
     options.MapInboundClaims = false;
 });
