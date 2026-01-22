@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Jwt.Revocatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Jwt.Refresh.Tokens", "Learning.Auth.Jwt.Refresh.Tokens\Learning.Auth.Jwt.Refresh.Tokens.csproj", "{342C3690-47AF-4882-9184-BD64F8DE875A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.OAuth.Api", "Learning.Auth.OAuth.Api\Learning.Auth.OAuth.Api.csproj", "{AC8ECC34-9C62-4844-9ADD-7D5B7E9FF73B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,5 +80,9 @@ Global
 		{342C3690-47AF-4882-9184-BD64F8DE875A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{342C3690-47AF-4882-9184-BD64F8DE875A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{342C3690-47AF-4882-9184-BD64F8DE875A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC8ECC34-9C62-4844-9ADD-7D5B7E9FF73B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC8ECC34-9C62-4844-9ADD-7D5B7E9FF73B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC8ECC34-9C62-4844-9ADD-7D5B7E9FF73B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC8ECC34-9C62-4844-9ADD-7D5B7E9FF73B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
