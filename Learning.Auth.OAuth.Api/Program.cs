@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Authentication;
 using Learning.Auth.OAuth.Api;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,17 @@ builder.Services.AddAuthentication("cookie").AddCookie("cookie").AddOAuth("githu
     options.UserInformationEndpoint = "https://api.github.com/user";
     options.CallbackPath = "/oauth/callback";
     options.SignInScheme = "cookie";
+    options.Events.OnCreatingTicket = async context =>
+    {
+        // should store the access token somewhere so can use the refresh token to get another token later
+        using var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
+        using var response = await context.Backchannel.SendAsync(request);
+        var user = await response.Content.ReadFromJsonAsync<JsonElement>();
+        context.RunClaimActions(user);
+    };
+    options.ClaimActions.MapJsonKey("sub", "id");
+    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "login");
 });
 
 var app = builder.Build();
