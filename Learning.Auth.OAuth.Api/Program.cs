@@ -1,11 +1,11 @@
+using Microsoft.AspNetCore.Authentication;
 using Learning.Auth.OAuth.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<OAuthOptions>("github", builder.Configuration.GetSection("github"));
 
-// This stuff only works on .NET 6.
-builder.Services.AddAuthentication().AddOAuth("github", options =>
+builder.Services.AddAuthentication("cookie").AddCookie("cookie").AddOAuth("github", options =>
 {
     options.ClientSecret = builder.Configuration["github:clientSecret"] ?? string.Empty;
     options.ClientId = builder.Configuration["github:clientId"] ?? string.Empty;
@@ -13,6 +13,7 @@ builder.Services.AddAuthentication().AddOAuth("github", options =>
     options.TokenEndpoint = "https://github.com/login/oauth/access_token";
     options.UserInformationEndpoint = "https://api.github.com/user";
     options.CallbackPath = "/oauth/callback";
+    options.SignInScheme = "cookie";
 });
 
 var app = builder.Build();
@@ -20,7 +21,7 @@ var app = builder.Build();
 app.UseAuthentication();
 
 app.MapGet("/login", () =>
-    Results.Challenge(authenticationSchemes: new List<string> {"github"}));
+    Results.Challenge(new AuthenticationProperties { RedirectUri = "/" }, new List<string> {"github"}));
 
 app.MapGet("/", (HttpContext context) =>
     Results.Ok(context.User.Claims.Select(claim => new { claim.Type, claim.Value }).ToList()));
