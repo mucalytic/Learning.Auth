@@ -1,9 +1,14 @@
+using Learning.Auth.OAuth.Api;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<OAuthOptions>("github", builder.Configuration.GetSection("github"));
+
+// This stuff only works on .NET 6.
 builder.Services.AddAuthentication().AddOAuth("github", options =>
 {
-    options.ClientId = "Ov23liGvE0Z5ZMfIjjnL";
-    options.ClientSecret = "3eca3e78147ff5d9e11e9bbe31c76434d5a537e2";
+    options.ClientSecret = builder.Configuration["github:clientSecret"] ?? string.Empty;
+    options.ClientId = builder.Configuration["github:clientId"] ?? string.Empty;
     options.AuthorizationEndpoint = "https://github.com/login/oauth/authorize";
     options.TokenEndpoint = "https://github.com/login/oauth/access_token";
     options.UserInformationEndpoint = "https://api.github.com/user";
@@ -15,9 +20,9 @@ var app = builder.Build();
 app.UseAuthentication();
 
 app.MapGet("/login", () =>
-    Results.Challenge(authenticationSchemes: ["github"]));
+    Results.Challenge(authenticationSchemes: new List<string> {"github"}));
 
 app.MapGet("/", (HttpContext context) =>
-    Results.Ok(context.User.Claims.Select(claim => new { claim.Type, claim.Value })));
+    Results.Ok(context.User.Claims.Select(claim => new { claim.Type, claim.Value }).ToList()));
 
 app.Run();
