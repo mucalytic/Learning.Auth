@@ -1,3 +1,6 @@
+This is an example of "incremental authorisation", where you only run the OAuth 2.0 authentication code flow
+when you need to access YouTube data. Users accessing other endpoints don't also have to authorise with YouTube.
+
  1. Navigating to / checks the "youtube-enabled" policy.
  2. That requires authentication under the "cookie" scheme.
  3. So it redirects us to the /login endpoint which sets a cookie containing user details (a generated user_id claim).
