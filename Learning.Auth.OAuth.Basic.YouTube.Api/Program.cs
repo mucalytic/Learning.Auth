@@ -4,7 +4,9 @@ using System.Security.Claims;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<OAuthOptions>("youtube", builder.Configuration.GetSection("youtube"));
-builder.Services.AddAuthentication("cookie").AddCookie("cookie").AddOAuth("youtube", options =>
+builder.Services.AddAuthentication("cookie")
+                .AddCookie("cookie", options => options.LoginPath = "/login")
+                .AddOAuth("youtube", options =>
 {
     options.ClientId = builder.Configuration["youtube:clientId"] ?? string.Empty;
     options.ClientSecret = builder.Configuration["youtube:clientSecret"] ?? string.Empty;
