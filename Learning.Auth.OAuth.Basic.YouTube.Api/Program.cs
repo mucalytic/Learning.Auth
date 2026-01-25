@@ -2,7 +2,6 @@ using System.Net.Http.Headers;
 using Learning.Auth.OAuth.Basic.YouTube.Api;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,6 +78,7 @@ builder.Services.AddAuthorization(options =>
               .RequireAuthenticatedUser();
     });
 });
+builder.Services.AddTransient<IClaimsTransformation, YouTubeTokenClaimsTransformation>();
 builder.Services.AddSingleton<Database>();
 builder.Services.AddHttpClient();
 
@@ -93,16 +93,14 @@ app.MapGet("/login", () =>
             new ClaimsIdentity([new Claim("user_id", Guid.NewGuid().ToString())], "cookie")),
         authenticationScheme: "cookie"));
 
-app.MapGet("/", async (IHttpClientFactory factory, HttpContext context, Database database) =>
+app.MapGet("/", async (IHttpClientFactory httpClientFactory, HttpContext context) =>
 {
     const string uri = "https://www.googleapis.com/youtube/v3/channels?part=snippet&mine=true";
-    var user = context.User;
-    var userId = user.FindFirstValue("user_id");
-    if (userId is null) return Results.Unauthorized();
+    var accessToken = context.User.FindFirstValue("youtube-access-token");
+    if (accessToken is null) return Results.Unauthorized();
     using var request = new HttpRequestMessage(HttpMethod.Get, uri);
-    var accessToken = database[userId];
     request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-    var client = factory.CreateClient();
+    var client = httpClientFactory.CreateClient();
     using var response = await client.SendAsync(request);
     var info = await response.Content.ReadAsStringAsync();
     return Results.Ok(info);
