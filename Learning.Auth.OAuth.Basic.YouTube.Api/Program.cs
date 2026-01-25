@@ -11,14 +11,6 @@ builder.Services.AddAuthentication("cookie")
                     var action = options.Events.OnRedirectToAccessDenied;
                     options.Events.OnRedirectToAccessDenied = context =>
                     {
-                        /* 1. navigating to / checks "youtube-enabled" policy
-                         * 2. that requires authentication under the "cookie" scheme
-                         * 3. so it redirects to the /login endpoint which sets a cookie containing user details
-                         * 4. then it redirects back to / which again checks the "youtube-enabled" policy
-                         * 5. that policy also requires that the user has the "youtube-token" claim
-                         * 6. because they don't, so it redirects them to the access denied page
-                         * 7. we catch it here and use oath with youtube
-                         */
                         if (context.Request.Path == "/")
                         {
                             return context.HttpContext.ChallengeAsync("youtube");
