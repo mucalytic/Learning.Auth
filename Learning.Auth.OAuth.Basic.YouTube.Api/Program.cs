@@ -78,7 +78,7 @@ builder.Services.AddAuthorization(options =>
               .RequireAuthenticatedUser();
     });
 });
-builder.Services.AddTransient<IClaimsTransformation, YouTubeTokenClaimsTransformation>();
+builder.Services.AddScoped<IClaimsTransformation, YouTubeTokenClaimsTransformation>();
 builder.Services.AddSingleton<Database>();
 builder.Services.AddHttpClient();
 
