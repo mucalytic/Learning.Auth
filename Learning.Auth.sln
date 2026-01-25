@@ -28,6 +28,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.OAuth.Basic.G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.OAuth.Basic.YouTube.Api", "Learning.Auth.OAuth.Basic.YouTube.Api\Learning.Auth.OAuth.Basic.YouTube.Api.csproj", "{BBBA2C42-93D5-4987-B30A-9C068C3F8FF9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.OAuth.Custom.Server", "Learning.Auth.OAuth.Custom.Server\Learning.Auth.OAuth.Custom.Server.csproj", "{9F5E323B-8550-45A8-8944-76709E9E093E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.OAuth.Custom.Client", "Learning.Auth.OAuth.Custom.Client\Learning.Auth.OAuth.Custom.Client.csproj", "{075C5128-D952-4F38-9CD7-EA3CC20969A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,5 +94,13 @@ Global
 		{BBBA2C42-93D5-4987-B30A-9C068C3F8FF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBBA2C42-93D5-4987-B30A-9C068C3F8FF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBBA2C42-93D5-4987-B30A-9C068C3F8FF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F5E323B-8550-45A8-8944-76709E9E093E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F5E323B-8550-45A8-8944-76709E9E093E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F5E323B-8550-45A8-8944-76709E9E093E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F5E323B-8550-45A8-8944-76709E9E093E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{075C5128-D952-4F38-9CD7-EA3CC20969A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{075C5128-D952-4F38-9CD7-EA3CC20969A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{075C5128-D952-4F38-9CD7-EA3CC20969A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{075C5128-D952-4F38-9CD7-EA3CC20969A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
