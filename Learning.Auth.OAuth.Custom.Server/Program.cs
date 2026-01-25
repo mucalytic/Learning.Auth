@@ -1,5 +1,6 @@
 using Learning.Auth.OAuth.Custom.Server.Endpoints.OAuth;
 using Learning.Auth.OAuth.Custom.Server.Endpoints;
+using Learning.Auth.OAuth.Custom.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +8,7 @@ builder.Services.AddAuthentication("cookie")
                 .AddCookie("cookie", options => options.LoginPath = "/login");
 
 builder.Services.AddAuthorization();
-builder.Services.AddSingleton<object>();
+builder.Services.AddSingleton<DevKeysService>();
 
 var app = builder.Build();
 
