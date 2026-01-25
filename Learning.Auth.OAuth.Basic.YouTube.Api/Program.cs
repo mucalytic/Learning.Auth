@@ -1,6 +1,9 @@
+using Learning.Auth.OAuth.Basic.YouTube.Api;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<OAuthOptions>("youtube", builder.Configuration.GetSection("youtube"));
 
 builder.Services.AddAuthentication("cookie").AddCookie("cookie");
 
