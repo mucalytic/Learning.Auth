@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
-using Learning.Auth.OAuth.Api;
+using Learning.Auth.OAuth.Basic.GitHub.Api;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;

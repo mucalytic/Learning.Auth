@@ -1,4 +1,4 @@
-namespace Learning.Auth.OAuth.Api;
+namespace Learning.Auth.OAuth.Basic.GitHub.Api;
 
 public class OAuthOptions
 {

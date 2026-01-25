@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Jwt.Revocatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Jwt.Refresh.Tokens", "Learning.Auth.Jwt.Refresh.Tokens\Learning.Auth.Jwt.Refresh.Tokens.csproj", "{342C3690-47AF-4882-9184-BD64F8DE875A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.OAuth.Api", "Learning.Auth.OAuth.Api\Learning.Auth.OAuth.Api.csproj", "{AC8ECC34-9C62-4844-9ADD-7D5B7E9FF73B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.OAuth.Basic.GitHub.Api", "Learning.Auth.OAuth.Basic.GitHub.Api\Learning.Auth.OAuth.Basic.GitHub.Api.csproj", "{AC8ECC34-9C62-4844-9ADD-7D5B7E9FF73B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
