@@ -14,6 +14,6 @@
 14. The handler retrieves the existing local principal (from the prior cookie session),
 15. Then it stores the new access token in the database (keyed by the local user_id),
 16. Then it clones the principal to preserve local claims, and adds the "youtube-token" claim as a flag.
-15. A new enriched cookie is issued (with preserved user_id and the new flag claim).
-16. We are finally able to access the / endpoint.
-17. We use the stored access token to call the YouTube API on behalf of the user and return the results.
+17. A new enriched cookie is issued (with preserved user_id and the new flag claim).
+18. We are finally able to access the / endpoint.
+19. We use the stored access token to call the YouTube API on behalf of the user and return the results.
