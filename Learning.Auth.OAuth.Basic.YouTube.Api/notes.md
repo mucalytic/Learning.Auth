@@ -1,17 +1,19 @@
- 1. navigating to / checks the "youtube-enabled" policy.
- 2. that requires authentication under the "cookie" scheme,
- 3. so it redirects us to the /login endpoint which sets a cookie containing user details,
- 4. then it redirects us back to / which again checks the "youtube-enabled" policy.
- 5. that policy also requires that the user has the "youtube-token" claim,
- 6. but they don't, so normally it would redirect us to the access-denied page.
- 7. but we've overridden that with a custom OnRedirectToAccessDenied event.
- 8. in the delegate provided to the event, we make sure that the last path we tried to access was /
- 9. and because it was, we start an oauth 2.0 authorisation code flow to authorise with youtube.
-10. this redirects us to google's authorisation endpoint.
-11. after the user consents, google redirects us back to our callback endpoint with an authorisation code.
-12. then we call google's token endpoint to exchange the code for an access token.
-13. we intercept authentication ticket creation with a custom OnCreatingTicket event handler.
-14. the handler saves the access token to the database,
-15. then we call google's userinfo endpoint to get the user's claims using the access token.
-16. we merge those claims with the local user's claims and set the "youtube-token" claim.
-17. then we are finally able to access the / endpoint and do whatever we want there.
+ 1. Navigating to / checks the "youtube-enabled" policy.
+ 2. That requires authentication under the "cookie" scheme.
+ 3. So it redirects us to the /login endpoint which sets a cookie containing user details (a generated user_id claim).
+ 4. Then it redirects us back to / which again checks the "youtube-enabled" policy.
+ 5. That policy also requires that the user has the "youtube-token" claim.
+ 6. But they don't, so normally it would redirect us to the access-denied page.
+ 7. But we've overridden that with a custom OnRedirectToAccessDenied event.
+ 8. In the delegate provided to the event, we make sure that the last path we tried to access was /.
+ 9. And because it was, we start an OAuth 2.0 authorisation code flow to authorise with YouTube (via Google).
+10. This redirects us to Google's authorisation endpoint.
+11. After the user consents, Google redirects us back to our callback endpoint with an authorisation code.
+12. The OAuth middleware calls Google's token endpoint to exchange the code for an access token.
+13. We intercept authentication ticket creation with a custom OnCreatingTicket event handler.
+14. The handler retrieves the existing local principal (from the prior cookie session),
+15. Then it stores the new access token in the database (keyed by the local user_id),
+16. Then it clones the principal to preserve local claims, and adds the "youtube-token" claim as a flag.
+15. A new enriched cookie is issued (with preserved user_id and the new flag claim).
+16. We are finally able to access the / endpoint.
+17. We use the stored access token to call the YouTube API on behalf of the user and return the results.
