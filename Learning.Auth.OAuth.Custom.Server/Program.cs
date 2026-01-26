@@ -8,6 +8,7 @@ builder.Services.AddAuthentication("cookie")
                 .AddCookie("cookie", options => options.LoginPath = "/login");
 builder.Services.AddAuthorization();
 builder.Services.AddSingleton<DevKeysService>();
+builder.Services.AddScoped<ValidationCodeVerifier>();
 
 var app = builder.Build();
 

@@ -357,3 +357,6 @@ localhost*.pem
 localhost*-key.pem
 *.pem
 *-key.pem
+
+# Other local files
+crypto_key
