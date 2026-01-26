@@ -8,14 +8,22 @@ public static class GetAuthorize
 {
     public static IResult Handler(HttpRequest request, IDataProtectionProvider provider)
     {
-        request.Query.TryGetValue("scope", out var scope);
+        var issuer = HttpUtility.UrlEncode("https://localhost:5005");
         request.Query.TryGetValue("state", out var state);
+        if (!request.Query.TryGetValue("response_type", out var responseType))
+        {
+            return Results.BadRequest(new
+            {
+                error = "invalid_request",
+                state = state,
+                iss = issuer
+            });
+        }
+        request.Query.TryGetValue("scope", out var scope);
         request.Query.TryGetValue("client_id", out var clientId);
         request.Query.TryGetValue("redirect_uri", out var redirectUri);
-        request.Query.TryGetValue("response_type", out var responseType);
         request.Query.TryGetValue("code_challenge", out var codeChallenge);
         request.Query.TryGetValue("code_challenge_method", out var codeChallengeMethod);
-        var issuer = HttpUtility.UrlEncode("https://localhost:5005");
         var protector = provider.CreateProtector("oauth");
         var authCode = new AuthCode(
             clientId.ToString(),
