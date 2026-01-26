@@ -351,3 +351,9 @@ MigrationBackup/
 
 # Some JetBrains thing
 .idea/
+
+# Local HTTPS certificate files
+localhost*.pem
+localhost*-key.pem
+*.pem
+*-key.pem

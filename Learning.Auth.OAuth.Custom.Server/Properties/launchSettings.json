@@ -1,13 +1,27 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "https": {
+    "Learning.Auth.OAuth.Custom.Server": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,
-      "applicationUrl": "https://localhost:7045",
+      "applicationUrl": "https://localhost:5005",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "Kestrel": {
+        "Endpoints": {
+          "Https": {
+            "Url": "https://localhost:5005",
+            "Certificate": {
+              "Path": "/home/aaron/Storage/dev/Git/Learning.Auth/Learning.Auth.OAuth.Custom.Server/localhost+2.pem",
+              "KeyPath": "/home/aaron/Storage/dev/Git/Learning.Auth/Learning.Auth.OAuth.Custom.Server/localhost+2-key.pem"
+            }
+          }
+        },
+        "EndpointDefaults": {
+          "Protocols": "Http1AndHttp2"
+        }
       }
     }
   }

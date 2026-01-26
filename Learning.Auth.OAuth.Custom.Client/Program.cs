@@ -7,13 +7,18 @@ builder.Services.AddAuthentication("cookie")
                 .AddOAuth("custom", options =>
                 {
                     options.SignInScheme = "cookie";
-                    options.ClientId = "";
-                    options.ClientSecret = "";
-                    options.AuthorizationEndpoint = "https://localhost:7045/oauth/authorize";
-                    options.TokenEndpoint = "https://localhost:7045/oauth/token";
+                    options.ClientId = "x";
+                    options.ClientSecret = "x";
+                    options.AuthorizationEndpoint = "https://localhost:5005/oauth/authorize";
+                    options.TokenEndpoint = "https://localhost:5005/oauth/token";
                     options.CallbackPath = "/oauth/callback";
                     options.UsePkce = true;
                     options.ClaimActions.MapJsonKey("sub", "sub");
+                    options.BackchannelHttpHandler = new HttpClientHandler
+                    {
+                        ServerCertificateCustomValidationCallback = 
+                            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    };
                     options.Events.OnCreatingTicket = context => Task.CompletedTask;
                 });
 
@@ -28,7 +33,7 @@ app.MapGet("/login", () =>
     Results.Challenge(
         new AuthenticationProperties
         {
-            RedirectUri = "https://localhost:7131/"
+            RedirectUri = "https://localhost:5004/"
         },
         authenticationSchemes: ["custom"]));
 

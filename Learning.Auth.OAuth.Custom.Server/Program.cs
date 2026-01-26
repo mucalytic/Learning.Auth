@@ -13,6 +13,7 @@ builder.Services.AddSingleton<DevKeysService>();
 var app = builder.Build();
 
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGet("/login",           GetLogin.Handler);
 app.MapPost("/login",          PostLogin.Handler);

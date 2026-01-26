@@ -15,7 +15,7 @@ public static class GetAuthorize
         request.Query.TryGetValue("response_type", out var responseType);
         request.Query.TryGetValue("code_challenge", out var codeChallenge);
         request.Query.TryGetValue("code_challenge_method", out var codeChallengeMethod);
-        var issuer = HttpUtility.UrlEncode("https://localhost:7045");
+        var issuer = HttpUtility.UrlEncode("https://localhost:5005");
         var protector = provider.CreateProtector("oauth");
         var authCode = new AuthCode(
             clientId.ToString(),
