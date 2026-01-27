@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Learning.Auth.Basics.Api.Schemas.Handlers;
+using Learning.Auth.Basics.Api.Schemes.Handlers;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 

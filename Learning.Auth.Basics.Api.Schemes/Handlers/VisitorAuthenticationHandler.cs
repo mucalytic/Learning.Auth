@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using System.Text.Encodings.Web;
 using System.Security.Claims;
 
-namespace Learning.Auth.Basics.Api.Schemas.Handlers;
+namespace Learning.Auth.Basics.Api.Schemes.Handlers;
 
 public class VisitorAuthenticationHandler(
     IOptionsMonitor<CookieAuthenticationOptions> options,
