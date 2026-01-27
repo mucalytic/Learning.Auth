@@ -3,9 +3,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 
 // by hard-coding the JWK here, we circumvent the need to go to the auth server to get the public key
-var jwkString = """
-                {"e":"AQAB","key_ops":[],"kty":"RSA","n":"2PFnTf5a_v9gpHjx87nMPWB2a_BdsIQSKRGAQeZNYiRlr-_okojGUkAhzxHfabEkpop9TfAVZNpHlR76bEd8GTfOvJa4J0gH41nhnGzBmZUeGPdOzlNGDvTMcOMh6ZNXm53VHspq09wOLk9fzFnKldoHXJpyaJn6jzxpbC2C2pUgQuczg0_SZomJNtH4r27deQ-achQZ-EmZ41pyUWurUgZEXw8Z7PNdTIHDFp7B23B8muIOGnWDJtfebMrw6WgQcZEjj5s0P1cBglfoUcb1V3F7A3vM_b9ASExzl2Lhca0YjR9yRK4E9nwdQCJn2j06VPgqgd7CZSF1ygTSzv_uYw","oth":[],"x5c":[]}
-                """;
+var jwkString = "";
 
 var builder = WebApplication.CreateBuilder(args);
 
