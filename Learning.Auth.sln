@@ -22,7 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Cookies.Inval
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Jwt.Revocation", "Learning.Auth.Jwt.Revocation\Learning.Auth.Jwt.Revocation.csproj", "{E71C87FB-A123-416C-B51E-959D287511AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.Jwt.Refresh.Tokens", "Learning.Auth.Jwt.Refresh.Tokens\Learning.Auth.Jwt.Refresh.Tokens.csproj", "{342C3690-47AF-4882-9184-BD64F8DE875A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.OAuth.Refresh.Tokens", "Learning.Auth.OAuth.Refresh.Tokens\Learning.Auth.OAuth.Refresh.Tokens.csproj", "{342C3690-47AF-4882-9184-BD64F8DE875A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.Auth.OAuth.Basic.GitHub.Api", "Learning.Auth.OAuth.Basic.GitHub.Api\Learning.Auth.OAuth.Basic.GitHub.Api.csproj", "{AC8ECC34-9C62-4844-9ADD-7D5B7E9FF73B}"
 EndProject
