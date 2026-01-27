@@ -1,0 +1,1 @@
+This repo follows Anton's RawCoding authentication series (https://www.youtube.com/playlist?list=PLOeFnOV9YBa4yaz-uIi5T4ZW3QQGHJQXi) to build a comprehensive understanding of authentication in .NET from basics to custom OAuth server and more, including cookie and JWT authentication.
