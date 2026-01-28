@@ -1,6 +1,7 @@
 using Learning.Auth.OAuth.Refresh.Tokens.Interfaces;
 using Learning.Auth.OAuth.Refresh.Tokens.Entities;
 using Learning.Auth.OAuth.Refresh.Tokens.Services;
+using Microsoft.AspNetCore.Authentication;
 using Learning.Auth.OAuth.Refresh.Tokens;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -43,6 +44,10 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapGet("/", () => "Hello world!");
+app.MapGet("/", (ClaimsPrincipal user) =>
+    Results.Ok(user.Claims.Select(claim => new { claim.Type, claim.Value }).ToList()));
+
+app.MapGet("/login", () =>
+    Results.Challenge(new AuthenticationProperties { RedirectUri = "/" }, new List<string> { "patreon" }));
 
 app.Run();
