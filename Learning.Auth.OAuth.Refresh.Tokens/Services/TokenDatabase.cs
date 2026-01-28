@@ -8,32 +8,44 @@ public class TokenDatabase(IWebHostEnvironment environment) : ITokenDatabase
 {
     private readonly string _path = Path.Combine(environment.ContentRootPath, "tokens.json");
 
-    public Task<TokenInfo?> TryLoadAsync(string patreonId)
+    public async Task<IEnumerable<(string, TokenInfo)>> GetAllExpiringTokensAsync(CancellationToken cancellationToken)
     {
         if (File.Exists(_path))
         {
-            var text = File.ReadAllText(_path);
+            var text = await File.ReadAllTextAsync(_path, cancellationToken);
             var tokens = JsonSerializer.Deserialize<Dictionary<string, TokenInfo>>(text)
                                              ?? new Dictionary<string, TokenInfo>();
-            return tokens.TryGetValue(patreonId, out var tokenInfo)
-                ? Task.FromResult<TokenInfo?>(tokenInfo)
-                : Task.FromResult<TokenInfo?>(null);
+            var expiring = tokens.Where(kvp => kvp.Value.Expiry.Subtract(DateTime.UtcNow) < TimeSpan.FromMinutes(5));
+            return expiring.Select(kvp => (kvp.Key, kvp.Value)).ToList();
         }
         File.Create(_path).Close();
-        return Task.FromResult<TokenInfo?>(null);
+        return Enumerable.Empty<(string, TokenInfo)>();
     }
 
-    public Task<bool> TrySaveAsync(string patreonId, TokenInfo tokenInfo)
+    public async Task<TokenInfo?> TryGetTokenAsync(string patreonId, CancellationToken cancellationToken)
+    {
+        if (File.Exists(_path))
+        {
+            var text = await File.ReadAllTextAsync(_path, cancellationToken);
+            var tokens = JsonSerializer.Deserialize<Dictionary<string, TokenInfo>>(text)
+                                             ?? new Dictionary<string, TokenInfo>();
+            return tokens.GetValueOrDefault(patreonId);
+        }
+        File.Create(_path).Close();
+        return null;
+    }
+
+    public async Task<bool> TrySaveTokenAsync(string patreonId, TokenInfo tokenInfo, CancellationToken cancellationToken)
     {
         var tokens = new Dictionary<string, TokenInfo>();
         if (File.Exists(_path))
         {
-            var json = File.ReadAllText(_path);
+            var json = await File.ReadAllTextAsync(_path, cancellationToken);
             tokens = JsonSerializer.Deserialize<Dictionary<string, TokenInfo>>(json)
                                          ?? new Dictionary<string, TokenInfo>();
             tokens[patreonId] = tokenInfo;
         }
-        File.WriteAllText(_path, JsonSerializer.Serialize(tokens));
-        return Task.FromResult(true);
+        await File.WriteAllTextAsync(_path, JsonSerializer.Serialize(tokens), cancellationToken);
+        return true;
     }
 }

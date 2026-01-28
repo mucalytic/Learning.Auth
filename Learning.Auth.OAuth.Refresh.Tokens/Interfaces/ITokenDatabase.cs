@@ -4,6 +4,7 @@ namespace Learning.Auth.OAuth.Refresh.Tokens.Interfaces;
 
 public interface ITokenDatabase
 {
-    Task<TokenInfo?> TryLoadAsync(string patreonId);
-    Task<bool>       TrySaveAsync(string patreonId, TokenInfo tokenInfo);
+    Task<IEnumerable<(string, TokenInfo)>> GetAllExpiringTokensAsync(CancellationToken cancellationToken);
+    Task<TokenInfo?> TryGetTokenAsync(string patreonId, CancellationToken cancellationToken);
+    Task<bool> TrySaveTokenAsync(string patreonId, TokenInfo tokenInfo, CancellationToken cancellationToken);
 }

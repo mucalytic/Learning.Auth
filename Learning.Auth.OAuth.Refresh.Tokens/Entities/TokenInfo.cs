@@ -1,10 +1,8 @@
 namespace Learning.Auth.OAuth.Refresh.Tokens.Entities;
 
-public class TokenInfo(string? accessToken, string? refreshToken, TimeSpan? expiry)
+public class TokenInfo
 {
-    public string   AccessToken  { get; } = accessToken ?? string.Empty;
-    public string   RefreshToken { get; } = refreshToken ?? string.Empty;
-    public DateTime Expiry       { get; } = expiry.HasValue
-                                                ? DateTime.UtcNow.AddSeconds(expiry.Value.TotalSeconds)
-                                                : DateTime.UtcNow;
+    public string   AccessToken  { get; init; }
+    public string   RefreshToken { get; init; }
+    public DateTime Expiry       { get; init; }
 }
