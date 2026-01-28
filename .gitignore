@@ -360,3 +360,4 @@ localhost*-key.pem
 
 # Other local files
 crypto_key
+tokens.json
