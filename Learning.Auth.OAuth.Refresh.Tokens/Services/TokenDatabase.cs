@@ -10,29 +10,21 @@ public class TokenDatabase(IWebHostEnvironment environment) : ITokenDatabase
 
     public async Task<IEnumerable<(string, TokenInfo)>> GetAllExpiringTokensAsync(CancellationToken cancellationToken)
     {
-        if (File.Exists(_path))
-        {
-            var text = await File.ReadAllTextAsync(_path, cancellationToken);
-            var tokens = JsonSerializer.Deserialize<Dictionary<string, TokenInfo>>(text)
-                                             ?? new Dictionary<string, TokenInfo>();
-            var expiring = tokens.Where(kvp => kvp.Value.Expiry.Subtract(DateTime.UtcNow) < TimeSpan.FromMinutes(5));
-            return expiring.Select(kvp => (kvp.Key, kvp.Value)).ToList();
-        }
-        File.Create(_path).Close();
-        return Enumerable.Empty<(string, TokenInfo)>();
+        if (!File.Exists(_path)) return [];
+        var text = await File.ReadAllTextAsync(_path, cancellationToken);
+        var tokens = JsonSerializer.Deserialize<Dictionary<string, TokenInfo>>(text)
+                                         ?? new Dictionary<string, TokenInfo>();
+        var expiring = tokens.Where(kvp => kvp.Value.Expiry.Subtract(DateTime.UtcNow) < TimeSpan.FromMinutes(5));
+        return expiring.Select(kvp => (kvp.Key, kvp.Value)).ToList();
     }
 
     public async Task<TokenInfo?> TryGetTokenAsync(string patreonId, CancellationToken cancellationToken)
     {
-        if (File.Exists(_path))
-        {
-            var text = await File.ReadAllTextAsync(_path, cancellationToken);
-            var tokens = JsonSerializer.Deserialize<Dictionary<string, TokenInfo>>(text)
-                                             ?? new Dictionary<string, TokenInfo>();
-            return tokens.GetValueOrDefault(patreonId);
-        }
-        File.Create(_path).Close();
-        return null;
+        if (!File.Exists(_path)) return null;
+        var text = await File.ReadAllTextAsync(_path, cancellationToken);
+        var tokens = JsonSerializer.Deserialize<Dictionary<string, TokenInfo>>(text)
+                                         ?? new Dictionary<string, TokenInfo>();
+        return tokens.GetValueOrDefault(patreonId);
     }
 
     public async Task<bool> TrySaveTokenAsync(string patreonId, TokenInfo tokenInfo, CancellationToken cancellationToken)
@@ -40,12 +32,13 @@ public class TokenDatabase(IWebHostEnvironment environment) : ITokenDatabase
         var tokens = new Dictionary<string, TokenInfo>();
         if (File.Exists(_path))
         {
-            var json = await File.ReadAllTextAsync(_path, cancellationToken);
-            tokens = JsonSerializer.Deserialize<Dictionary<string, TokenInfo>>(json)
+            var storedJson = await File.ReadAllTextAsync(_path, cancellationToken);
+            tokens = JsonSerializer.Deserialize<Dictionary<string, TokenInfo>>(storedJson)
                                          ?? new Dictionary<string, TokenInfo>();
-            tokens[patreonId] = tokenInfo;
         }
-        await File.WriteAllTextAsync(_path, JsonSerializer.Serialize(tokens), cancellationToken);
+        tokens[patreonId] = tokenInfo;
+        var updatedJson = JsonSerializer.Serialize(tokens);
+        await File.WriteAllTextAsync(_path, updatedJson, cancellationToken);
         return true;
     }
 }

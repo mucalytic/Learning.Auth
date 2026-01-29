@@ -8,7 +8,10 @@ using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<OAuthConfig>("patreon", builder.Configuration.GetSection("patreon"));
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
 builder.Services.AddAuthentication("cookie").AddCookie("cookie").AddOAuth("patreon", options =>
 {
     options.ClientId = builder.Configuration["patreon:clientId"] ?? string.Empty;
@@ -27,12 +30,13 @@ builder.Services.AddAuthentication("cookie").AddCookie("cookie").AddOAuth("patre
     };
 });
 builder.Services.AddAuthorization();
+
 builder.Services.AddHostedService<TokenRefresher>();
 builder.Services.AddScoped<RefreshTokenContext>();
 builder.Services.AddScoped<PatreonCreatingTicketHandler>();
 builder.Services.AddScoped<ITokenDatabase, TokenDatabase>();
-builder.Services.AddHttpClient("patreon-refresh", client =>
-    client.Timeout = TimeSpan.FromSeconds(10));
+builder.Services.Configure<OAuthConfig>("patreon", builder.Configuration.GetSection("patreon"));
+builder.Services.AddHttpClient("patreon-refresh", client => client.Timeout = TimeSpan.FromSeconds(10));
 
 var app = builder.Build();
 
