@@ -6,21 +6,22 @@ using System.Text.Json;
 namespace Learning.Auth.OAuth.Refresh.Tokens.Services;
 
 public class RefreshTokenContext(
-    IOptionsMonitor<OAuthOptions> options,
+    IOptionsMonitor<OAuthOptions> monitor,
     IHttpClientFactory httpClientFactory,
     ILogger<RefreshTokenContext> logger)
 {
     public async Task<OAuthTokenResponse> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
     {
+        var options = monitor.Get("patreon");
         var tokenRequestParameters = new Dictionary<string, string>()
         {
             { "grant_type", "refresh_token" },
             { "refresh_token", refreshToken },
-            { "client_id", options.CurrentValue.ClientId },
-            { "client_secret", options.CurrentValue.ClientSecret }
+            { "client_id", options.ClientId },
+            { "client_secret", options.ClientSecret }
         };
         var requestContent = new FormUrlEncodedContent(tokenRequestParameters);
-        var requestMessage = new HttpRequestMessage(HttpMethod.Post, options.CurrentValue.TokenEndpoint);
+        var requestMessage = new HttpRequestMessage(HttpMethod.Post, options.TokenEndpoint);
         requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         requestMessage.Content = requestContent;
         using var httpClient = httpClientFactory.CreateClient("patreon-refresh");

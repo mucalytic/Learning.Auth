@@ -38,7 +38,7 @@ public class TokenRefresher(IServiceProvider serviceProvider, ILogger<TokenRefre
                     }
                     logger.LogInformation("Refreshed token for {patreonId}", patreonId);
                 }
-                await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             }
             catch (Exception exception)
             {
