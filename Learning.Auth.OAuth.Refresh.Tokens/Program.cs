@@ -1,4 +1,5 @@
 using Learning.Auth.OAuth.Refresh.Tokens.EventHandlers;
+using Learning.Auth.OAuth.Refresh.Tokens.HttpClients;
 using Learning.Auth.OAuth.Refresh.Tokens.Interfaces;
 using Learning.Auth.OAuth.Refresh.Tokens.Background;
 using Learning.Auth.OAuth.Refresh.Tokens.Services;
@@ -12,31 +13,35 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 
-builder.Services.AddAuthentication("cookie").AddCookie("cookie").AddOAuth("patreon", options =>
-{
-    options.ClientId = builder.Configuration["patreon:clientId"] ?? string.Empty;
-    options.ClientSecret = builder.Configuration["patreon:clientSecret"] ?? string.Empty;
-    options.UserInformationEndpoint = "https://www.patreon.com/api/oauth2/v2/identity";
-    options.AuthorizationEndpoint = "https://www.patreon.com/oauth2/authorize";
-    options.TokenEndpoint = "https://www.patreon.com/api/oauth2/token";
-    options.CallbackPath = "/oauth/callback";
-    options.SignInScheme = "cookie";
-    options.Scope.Clear();
-    options.Scope.Add("identity");
-    options.Events.OnCreatingTicket = async context =>
-    {
-        var handler = context.HttpContext.RequestServices.GetRequiredService<PatreonCreatingTicketHandler>();
-        await handler.HandleAsync(context);
-    };
-});
+builder.Services.AddAuthentication("cookie")
+                .AddCookie("cookie", options => options.LoginPath = "/login")
+                .AddOAuth("patreon", options =>
+                {
+                    options.ClientId = builder.Configuration["patreon:clientId"] ?? string.Empty;
+                    options.ClientSecret = builder.Configuration["patreon:clientSecret"] ?? string.Empty;
+                    options.UserInformationEndpoint = "https://www.patreon.com/api/oauth2/v2/identity";
+                    options.AuthorizationEndpoint = "https://www.patreon.com/oauth2/authorize";
+                    options.TokenEndpoint = "https://www.patreon.com/api/oauth2/token";
+                    options.CallbackPath = "/oauth/callback";
+                    options.SignInScheme = "cookie";
+                    options.Scope.Clear();
+                    options.Scope.Add("identity");
+                    options.Events.OnCreatingTicket = async context =>
+                    {
+                        var handler = context.HttpContext.RequestServices.GetRequiredService<OnCreatingTicketHandler>();
+                        await handler.HandleAsync(context);
+                    };
+                });
 builder.Services.AddAuthorization();
 
 builder.Services.AddHostedService<TokenRefresher>();
 builder.Services.AddScoped<RefreshTokenContext>();
-builder.Services.AddScoped<PatreonCreatingTicketHandler>();
+builder.Services.AddScoped<OnCreatingTicketHandler>();
 builder.Services.AddScoped<ITokenDatabase, TokenDatabase>();
 builder.Services.Configure<OAuthConfig>("patreon", builder.Configuration.GetSection("patreon"));
-builder.Services.AddHttpClient("patreon-refresh", client => client.Timeout = TimeSpan.FromSeconds(10));
+builder.Services.AddHttpClient("patreon-background-refresh", client => client.Timeout = TimeSpan.FromSeconds(10));
+builder.Services.AddHttpClient<PatreonHttpClient>("patreon-on-demand-refresh", client => client.Timeout = TimeSpan.FromSeconds(10))
+                .AddPolicyHandler(PatreonHttpClient.HandleUnauthorisedRequest);
 
 var app = builder.Build();
 
@@ -45,6 +50,15 @@ app.UseAuthorization();
 
 app.MapGet("/", (ClaimsPrincipal user) =>
     Results.Ok(user.Claims.Select(claim => new { claim.Type, claim.Value }).ToList()));
+
+app.MapGet("/info", async (ClaimsPrincipal user, PatreonHttpClient client) =>
+{
+    var patreonId = user.FindFirstValue("patreonId");
+    if (patreonId is null) return Results.Unauthorized();
+    var info = await client.GetInfo(patreonId);
+    return Results.Ok(info);
+})
+.RequireAuthorization();
 
 app.MapGet("/login", () =>
     Results.Challenge(new AuthenticationProperties { RedirectUri = "/" }, new List<string> { "patreon" }));

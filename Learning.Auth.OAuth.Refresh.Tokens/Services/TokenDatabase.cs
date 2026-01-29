@@ -27,7 +27,7 @@ public class TokenDatabase(IWebHostEnvironment environment) : ITokenDatabase
         return tokens.GetValueOrDefault(patreonId);
     }
 
-    public async Task<bool> TrySaveTokenAsync(string patreonId, TokenInfo tokenInfo, CancellationToken cancellationToken)
+    public async Task SaveTokenAsync(string patreonId, TokenInfo tokenInfo, CancellationToken cancellationToken)
     {
         var tokens = new Dictionary<string, TokenInfo>();
         if (File.Exists(_path))
@@ -39,6 +39,5 @@ public class TokenDatabase(IWebHostEnvironment environment) : ITokenDatabase
         tokens[patreonId] = tokenInfo;
         var updatedJson = JsonSerializer.Serialize(tokens);
         await File.WriteAllTextAsync(_path, updatedJson, cancellationToken);
-        return true;
     }
 }

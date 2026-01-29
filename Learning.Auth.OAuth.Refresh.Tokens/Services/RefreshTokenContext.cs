@@ -24,7 +24,7 @@ public class RefreshTokenContext(
         var requestMessage = new HttpRequestMessage(HttpMethod.Post, options.TokenEndpoint);
         requestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         requestMessage.Content = requestContent;
-        using var httpClient = httpClientFactory.CreateClient("patreon-refresh");
+        using var httpClient = httpClientFactory.CreateClient("patreon-background-refresh");
         requestMessage.Version = httpClient.DefaultRequestVersion;
         var response = await httpClient.SendAsync(requestMessage, cancellationToken);
         if (!response.IsSuccessStatusCode)

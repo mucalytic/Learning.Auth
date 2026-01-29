@@ -25,18 +25,13 @@ public class TokenRefresher(IServiceProvider serviceProvider, ILogger<TokenRefre
                         continue;
                     }
                     if (!int.TryParse(response.ExpiresIn, out var expiry) || expiry <= 0) expiry = 3600;
-                    var success = await database.TrySaveTokenAsync(patreonId, new TokenInfo
+                    await database.SaveTokenAsync(patreonId, new TokenInfo
                     {
                         RefreshToken = response.RefreshToken ?? token.RefreshToken,
-                        Expiry = DateTime.UtcNow.AddSeconds(expiry), 
+                        Expiry = DateTime.UtcNow.AddSeconds(expiry),
                         AccessToken = response.AccessToken,
                     }, stoppingToken);
-                    if (!success)
-                    {
-                        logger.LogError("Failed to save refreshed token for {patreonId}", patreonId);
-                        continue;
-                    }
-                    logger.LogInformation("Refreshed token for {patreonId}", patreonId);
+                    logger.LogInformation("Refreshed and saved token for {patreonId}", patreonId);
                 }
                 await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             }

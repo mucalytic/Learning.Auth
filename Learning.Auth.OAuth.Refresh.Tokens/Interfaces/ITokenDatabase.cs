@@ -6,5 +6,5 @@ public interface ITokenDatabase
 {
     Task<IEnumerable<(string, TokenInfo)>> GetAllExpiringTokensAsync(CancellationToken cancellationToken);
     Task<TokenInfo?> TryGetTokenAsync(string patreonId, CancellationToken cancellationToken);
-    Task<bool> TrySaveTokenAsync(string patreonId, TokenInfo tokenInfo, CancellationToken cancellationToken);
+    Task SaveTokenAsync(string patreonId, TokenInfo tokenInfo, CancellationToken cancellationToken);
 }

@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace Learning.Auth.OAuth.Refresh.Tokens.EventHandlers;
 
-public class PatreonCreatingTicketHandler(ITokenDatabase database, ILogger<PatreonCreatingTicketHandler> logger)
+public class OnCreatingTicketHandler(ITokenDatabase database, ILogger<OnCreatingTicketHandler> logger)
 {
     public async Task HandleAsync(OAuthCreatingTicketContext context)
     {
@@ -24,15 +24,12 @@ public class PatreonCreatingTicketHandler(ITokenDatabase database, ILogger<Patre
             logger.LogError("Failed to get access token for {patreonId}", patreonId);
             return;
         }
-        var success = await database.TrySaveTokenAsync(patreonId, new TokenInfo
+        await database.SaveTokenAsync(patreonId, new TokenInfo
         {
             Expiry = DateTime.UtcNow.Add(context.ExpiresIn ?? TimeSpan.FromSeconds(3600)),
             RefreshToken = context.RefreshToken,
             AccessToken = context.AccessToken
         }, context.HttpContext.RequestAborted);
-        if (!success)
-        {
-            logger.LogError("Failed to save token for {patreonId}", patreonId);
-        }
+        logger.LogInformation("Saved token for {patreonId}", patreonId);
     }
 }
